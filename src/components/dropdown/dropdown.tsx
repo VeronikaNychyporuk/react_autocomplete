@@ -23,10 +23,13 @@ export const Dropdown = React.memo(
       setQuery(newQuery);
       onSelected(null);
 
+      const trimmedQuery =
+        newQuery.trim().length > 0 ? newQuery.trim() : newQuery;
+
       window.clearTimeout(timerId.current);
 
       timerId.current = window.setTimeout(() => {
-        setNormalizedQuery(newQuery.trim().toLowerCase());
+        setNormalizedQuery(trimmedQuery.toLowerCase());
       }, delay);
     }
 

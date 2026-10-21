@@ -23,21 +23,30 @@ export const Dropdown = React.memo(
       setQuery(newQuery);
       onSelected(null);
 
-      const trimmedQuery =
-        newQuery.trim().length > 0 ? newQuery.trim() : newQuery;
+      const trimmedQuery = newQuery.trim();
 
       window.clearTimeout(timerId.current);
 
       timerId.current = window.setTimeout(() => {
-        setNormalizedQuery(trimmedQuery.toLowerCase());
+        if (trimmedQuery.length > 0) {
+          setNormalizedQuery(trimmedQuery.toLowerCase());
+        }
       }, delay);
     }
 
     const filteredPeople = useMemo(() => {
+      if (query.length === 0) {
+        return people;
+      }
+
+      if (query.trim().length === 0) {
+        return [];
+      }
+
       return people.filter(person =>
         person.name.toLowerCase().includes(normalizedQuery),
       );
-    }, [normalizedQuery, people]);
+    }, [normalizedQuery, query, people]);
 
     const handleSelected = (person: Person) => {
       setQuery(person.name);
